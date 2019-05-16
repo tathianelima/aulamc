@@ -28,4 +28,9 @@ public class CategoriaService {
 		obj.setId(null); //para garantir que é um objeto novo e não uma atualização
 		return repo.save(obj);
 	}
+	
+	public Categoria update(Categoria obj) {
+		find(obj.getId()); // para verificar se esse objeto existe
+		return repo.save(obj);
+	}
 }
