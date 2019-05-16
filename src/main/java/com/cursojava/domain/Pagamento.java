@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import com.cursojava.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+//mapeamento de herança criando uma tabela para cada subclasse (JOINED)
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Pagamento implements Serializable {
@@ -24,8 +25,8 @@ public abstract class Pagamento implements Serializable {
 
 	@JsonIgnore
 	@OneToOne
-	@JoinColumn(name="pedido_id")
-	@MapsId
+	@JoinColumn(name="pedido_id") 
+	@MapsId //para que esse id seja o mesmo do pedido
 	private Pedido pedido;
 
 	public Pagamento() {
