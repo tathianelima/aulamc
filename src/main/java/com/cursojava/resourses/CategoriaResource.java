@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -31,18 +33,20 @@ public class CategoriaResource {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	//Resposta http sem corpo
+																					//Resposta http sem corpo
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj){ //para inserir um objeto com base nos dados json passados
-		obj = service.insert(obj); //a opção save do repository retorna um objeto
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto){ 	//para inserir um objeto com base nos dados json passados
+		Categoria obj = service.fromDTO(objDto);
+		obj = service.insert(obj); 													//a opção save do repository retorna um objeto
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}").buildAndExpand(obj.getId()).toUri(); //o fromCurrentRequest pega a uri, acrescenta o id do objeto criado
-		return ResponseEntity.created(uri).build(); //atribui a uri a nova uri da resposta http 202
+					.path("/{id}").buildAndExpand(obj.getId()).toUri(); 			//o fromCurrentRequest pega a uri, acrescenta o id do objeto criado
+		return ResponseEntity.created(uri).build(); 								//atribui a uri a nova uri da resposta http 202
 	}
 
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id){
+		Categoria obj = service.fromDTO(objDto);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
@@ -79,6 +83,8 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(listDto);
 		
 	}
+	
+	
 	
 	
 }
